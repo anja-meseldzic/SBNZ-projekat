@@ -1,0 +1,48 @@
+//created on: May 17, 2021
+package sbnz.integracija
+
+//list any import classes here.
+import sbnz.integracija.example.model.Order;
+import sbnz.integracija.example.model.User;
+import sbnz.integracija.example.model.UserCategory;
+import java.util.List;
+
+
+//declare any global variables here
+
+
+rule "Change user category to SILVER when he has more than 3 orders"
+    when
+  		$u : User($id : id) and 
+   		List(size >= 2 && size < 8) from collect (Order(user.id == $id))
+   				
+    then
+        $u.setCategory(UserCategory.SILVER);
+		update($u);
+        System.out.println("User je imao vise od 3 narudzbina i prebacen je u kategoriju srebro " + $u.toString());
+
+end
+
+rule "Change user category to GOLD when he has more than 8 orders"
+    when
+  		$u : User($id : id) and 
+   		List(size >= 8 && size < 12) from collect (Order(user.id == $id))
+   				
+    then
+        $u.setCategory(UserCategory.GOLD);
+		update($u);
+        System.out.println("User je imao vise od 8 narudzbina i prebacen je u kategoriju zlato " + $u.toString());
+
+end
+
+rule "Change user category to PLATINUM when he has more than 12 orders"
+    when
+  		$u : User($id : id) and 
+   		List(size >= 12) from collect (Order(user.id == $id))
+   				
+    then
+        $u.setCategory(UserCategory.PLATINUM);
+		update($u);
+        System.out.println("User je imao vise od 12 narudzbina i prebacen je u kategoriju platina " + $u.toString());
+
+end

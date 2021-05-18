@@ -1,0 +1,70 @@
+//created on: May 18, 2021
+package sbnz.integracija
+
+//list any import classes here.
+
+import sbnz.integracija.example.model.Dish;
+import sbnz.integracija.example.model.Restaurant;
+import sbnz.integracija.example.model.Price;
+import sbnz.integracija.example.model.PriceCategory;
+
+//declare any global variables here
+
+
+
+
+rule "Calculate dish price category, if under average then it is cheap"
+
+    when
+        $d : Dish($id : id)
+        $r : Restaurant($resId : id)
+        $avgPrice : Number() from accumulate(
+								Price( dish.id == $id , $pr: price ), 
+								average($pr)
+							)
+		$p : Price(dish.id == id , restaurant.id == $resId, $price : price )
+		Integer($price < $avgPrice -50)
+    then
+        $d.setPriceCategory(PriceCategory.CHEAP);
+        update($d);
+        System.out.println("Uspesno je promenjena kategorija ");
+
+end
+
+
+rule "Calculate dish price category, if above average then it is expensive"
+
+    when
+        $d : Dish($id : id)
+        $r : Restaurant($resId : id)
+        $avgPrice : Number() from accumulate(
+								Price( dish.id == $id , $pr: price ), 
+								average($pr)
+							)
+		$p : Price(dish.id == id , restaurant.id == $resId, $price : price )
+		Integer($price > $avgPrice +50)
+    then
+        $d.setPriceCategory(PriceCategory.EXPENSIVE);
+        update($d);
+        System.out.println("Uspesno je promenjena kategorija ");
+
+end
+
+rule "Calculate dish price category, if in average then it is standard"
+
+    when
+        $d : Dish($id : id)
+        $r : Restaurant($resId : id)
+        $avgPrice : Number() from accumulate(
+								Price( dish.id == $id , $pr: price ), 
+								average($pr)
+							)
+		$p : Price(dish.id == id , restaurant.id == $resId, $price : price )
+		Integer($price >= $avgPrice - 50 && $price <= $avgPrice + 50)
+    then
+        $d.setPriceCategory(PriceCategory.STANDARD);
+        update($d);
+        System.out.println("Uspesno je promenjena kategorija ");
+
+end
+
