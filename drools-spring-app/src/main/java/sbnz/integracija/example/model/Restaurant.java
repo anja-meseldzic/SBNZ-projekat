@@ -30,16 +30,20 @@ public class Restaurant {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Dish> menu;
+	
+	@Column(name = "priceCategory" , nullable = false)
+	private PriceCategory priceCategory;
 
 	public Restaurant() {}
 	
-	public Restaurant(long id, String name, Location location, Delivery delivery, List<Dish> menu) {
+	public Restaurant(long id, String name, Location location, Delivery delivery, List<Dish> menu,PriceCategory category) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.location = location;
 		this.delivery = delivery;
 		this.menu = menu;
+		this.priceCategory = category;
 	}
 
 	public long getId() {
@@ -80,6 +84,14 @@ public class Restaurant {
 
 	public void setMenu(List<Dish> menu) {
 		this.menu = menu;
+	}
+
+	public PriceCategory getPriceCategory() {
+		return priceCategory;
+	}
+
+	public void setPriceCategory(PriceCategory priceCategory) {
+		this.priceCategory = priceCategory;
 	}
 	
 	

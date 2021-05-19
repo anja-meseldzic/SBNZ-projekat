@@ -22,19 +22,16 @@ public class Dish {
 	@Column(name = "dishType", nullable =  false)
 	private DishType dishType;
 	
-	@Column(name = "priceCategory", nullable = false)
-	private PriceCategory priceCategory;
-
 	public Dish() {}
 	
 	
-	public Dish(long id, String name, FoodType foodType, DishType dishType, PriceCategory priceCategory) {
+	public Dish(long id, String name, FoodType foodType, DishType dishType) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.foodType = foodType;
 		this.dishType = dishType;
-		this.priceCategory = priceCategory;
+		
 	}
 
 
@@ -70,14 +67,6 @@ public class Dish {
 
 	public void setDishType(DishType dishType) {
 		this.dishType = dishType;
-	}
-
-	public PriceCategory getPriceCategory() {
-		return priceCategory;
-	}
-
-	public void setPriceCategory(PriceCategory priceCategory) {
-		this.priceCategory = priceCategory;
 	}
 	
 	

@@ -22,12 +22,12 @@ rule "Calculate dish price category, if under average then it is cheap"
 								Price( dish.id == $id , $pr: price ), 
 								average($pr)
 							)
-		$p : Price(dish.id == id , restaurant.id == $resId, $price : price )
-		Integer($price < $avgPrice -50)
+		$p : Price(dish.id == $id , restaurant.id == $resId, $price : price )
+		eval($price < ($avgPrice.intValue() -50))
     then
-        $d.setPriceCategory(PriceCategory.CHEAP);
-        update($d);
-        System.out.println("Uspesno je promenjena kategorija ");
+        $p.setPriceCategory(PriceCategory.CHEAP);
+        update($p);
+        System.out.println("Jelo : " + $p.getDish().getId() + " izkategorije : "+ $p.getPriceCategory() + " prosecna cena je : "+ $avgPrice + " cena jela je: " + $price + " iz restorana " + $r.getId());
 
 end
 
@@ -41,13 +41,13 @@ rule "Calculate dish price category, if above average then it is expensive"
 								Price( dish.id == $id , $pr: price ), 
 								average($pr)
 							)
-		$p : Price(dish.id == id , restaurant.id == $resId, $price : price )
-		Integer($price > $avgPrice +50)
+		$p : Price(dish.id == $id , restaurant.id == $resId, $price : price )
+		eval($price > ($avgPrice.intValue() + 50))
     then
-        $d.setPriceCategory(PriceCategory.EXPENSIVE);
-        update($d);
-        System.out.println("Uspesno je promenjena kategorija ");
-
+        $p.setPriceCategory(PriceCategory.EXPENSIVE);
+        update($p);
+        System.out.println("Jelo : " + $p.getDish().getId() + " iz kategorije : "+ $p.getPriceCategory() + " prosecna cena je : "+ $avgPrice + " cena jela je: " + $price + " iz restorana " + $r.getId());
+        
 end
 
 rule "Calculate dish price category, if in average then it is standard"
@@ -59,12 +59,12 @@ rule "Calculate dish price category, if in average then it is standard"
 								Price( dish.id == $id , $pr: price ), 
 								average($pr)
 							)
-		$p : Price(dish.id == id , restaurant.id == $resId, $price : price )
-		Integer($price >= $avgPrice - 50 && $price <= $avgPrice + 50)
+		$p : Price(dish.id == $id , restaurant.id == $resId, $price : price )
+		eval($price >= ($avgPrice.intValue() - 50) && $price <= ($avgPrice.intValue() + 50))
     then
-        $d.setPriceCategory(PriceCategory.STANDARD);
-        update($d);
-        System.out.println("Uspesno je promenjena kategorija ");
-
+        $p.setPriceCategory(PriceCategory.STANDARD);
+        update($p);
+        System.out.println("Jelo : " + $p.getDish().getId() + " iz kategorije : "+ $p.getPriceCategory() + " prosecna cena je : "+ $avgPrice + " cena jela je: " + $price + " iz restorana " + $r.getId());
+       
 end
 

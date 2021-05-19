@@ -25,17 +25,21 @@ public class Price {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Restaurant restaurant;
+	
+	@Column(name = "priceCategory", nullable = false)
+	private PriceCategory priceCategory;
 
 	public Price() {}
 	
 	
 	
-	public Price(long id, double price, Dish dish, Restaurant restaurant) {
+	public Price(long id, double price, Dish dish, Restaurant restaurant,PriceCategory category) {
 		super();
 		this.id = id;
 		this.price = price;
 		this.dish = dish;
 		this.restaurant = restaurant;
+		this.priceCategory = category;
 	}
 
 
@@ -71,6 +75,19 @@ public class Price {
 	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
 	}
+
+
+
+	public PriceCategory getPriceCategory() {
+		return priceCategory;
+	}
+
+
+
+	public void setPriceCategory(PriceCategory priceCategory) {
+		this.priceCategory = priceCategory;
+	}
+	
 	
 	
 }

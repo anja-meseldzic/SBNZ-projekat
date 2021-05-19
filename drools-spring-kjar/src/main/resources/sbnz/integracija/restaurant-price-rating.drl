@@ -1,0 +1,56 @@
+//created on: May 18, 2021
+package sbnz.integracija
+
+//list any import classes here.
+
+import java.util.List;
+import sbnz.integracija.example.model.Dish;
+import sbnz.integracija.example.model.Restaurant;
+import sbnz.integracija.example.model.Price;
+import sbnz.integracija.example.model.PriceCategory;
+
+
+//declare any global variables here
+
+
+rule "when 70% or more dishes from restaurant are cheap => restaurant is cheap"
+
+    when
+        $r : Restaurant($resId : id)
+        $numOfAll : List() from collect (Price(restaurant.id == $resId))
+        $numOfCheap : List() from collect (Price(restaurant.id == $resId, priceCategory == PriceCategory.CHEAP))
+        eval(($numOfCheap.size()/$numOfAll.size()) > 0.7)
+    then
+        $r.setPriceCategory(PriceCategory.CHEAP);
+        update($r);
+        System.out.println("Restaurant category is "+ $r.getPriceCategory()+ " all:" + $numOfAll.size());
+		
+end
+
+rule "when 70% or more dishes from restaurant are standard => restaurant is standard"
+
+    when
+        $r : Restaurant($resId : id)
+        $numOfAll : List() from collect (Price(restaurant.id == $resId))
+        $numOfCheap : List() from collect (Price(restaurant.id == $resId, priceCategory == PriceCategory.STANDARD))
+        eval(($numOfCheap.size()/$numOfAll.size()) > 0.7)
+    then
+        $r.setPriceCategory(PriceCategory.STANDARD);
+        update($r);
+        System.out.println("Restaurant category is "+ $r.getPriceCategory()+ " all:" + $numOfAll.size());
+		
+end
+
+rule "when 70% or more dishes from restaurant are expensive => restaurant is expensive"
+
+    when
+        $r : Restaurant($resId : id)
+        $numOfAll : List() from collect (Price(restaurant.id == $resId))
+        $numOfCheap : List() from collect (Price(restaurant.id == $resId, priceCategory == PriceCategory.EXPENSIVE))
+        eval(($numOfCheap.size()/$numOfAll.size()) > 0.7)
+    then
+        $r.setPriceCategory(PriceCategory.EXPENSIVE);
+        update($r);
+        System.out.println("Restaurant category is "+ $r.getPriceCategory()+ " all:" + $numOfAll.size());
+		
+end
