@@ -110,7 +110,7 @@ public class User {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "User:[" + this.name + ", category "+ this.category.toString() + "]";
+		return "User:[" + this.name + "id "+ this.id +  ", category "+ this.category.toString() + "]";
 	}
 	
 }

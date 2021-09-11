@@ -1,0 +1,48 @@
+//created on: Sep 10, 2021
+package integracija
+
+import java.util.List;
+import sbnz.integracija.example.model.Restaurant;
+import sbnz.integracija.example.model.PriceCategory;
+import sbnz.integracija.example.model.User;
+import sbnz.integracija.example.model.Order;
+import sbnz.integracija.example.model.FoodType;
+import sbnz.integracija.example.model.PriceCategory;
+import sbnz.integracija.example.model.Delivery;
+import sbnz.integracija.example.model.CuisineType;
+import sbnz.integracija.example.model.DishType;
+
+//declare any global variables here
+
+global String _name;
+global FoodType _foodType;
+global PriceCategory _price;
+global Delivery _delivery;
+global CuisineType _cuisine;
+global DishType _dishType;
+
+global List<Restaurant> searchResult;
+
+rule "Search restaurants"
+	agenda-group "search"
+    when
+    	accumulate(
+    		$r: Restaurant(name == _name, cusine == _cuisine, delivery == _delivery, priceCategory == _price, $dishes : menu, 
+    		$dish : Dish(foodType == _foodType, dishType == _dishType) from $dishes)
+    		$restaurants: collectList($r)
+    	)
+        
+    then
+        searchResult : $restaurants;
+        System.out.println("Lista restorana i broj " + $restaurants.size() );
+
+end
+
+rule "Your Second Rule"
+    //include attributes such as "salience" here...
+    when
+        //conditions
+    then
+        //actions
+
+end

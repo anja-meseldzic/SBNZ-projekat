@@ -1,0 +1,14 @@
+<mat-toolbar style="min-width: 100%; max-width: max-content; background-color: rgb(80, 141, 255); color: white;" class="mat-elevation-z8"> 
+    <span style="width: 10px;"></span>
+  
+    <button mat-icon-button routerLink="../">
+      <mat-icon>home</mat-icon>
+    </button>
+    <span font-color="white" style="margin-left: 10px;">Restaurant picker</span>
+    <span style="width: 10px;"></span>
+    <button *ngIf = "showButton" mat-flat-button (click) = "logOut()" routerLink="../">
+      Log out
+    </button>
+    
+</mat-toolbar>
+<router-outlet></router-outlet>

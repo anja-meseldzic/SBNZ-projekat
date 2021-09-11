@@ -1,4 +1,4 @@
-//created on: May 18, 2021
+ //created on: May 18, 2021
 package sbnz.integracija
 
 //list any import classes here.
@@ -14,7 +14,7 @@ import sbnz.integracija.example.model.PriceCategory;
 
 
 rule "when 70% or more dishes from restaurant are cheap => restaurant is cheap"
-
+	salience 80
     when
         $r : Restaurant($resId : id)
         $numOfAll : List() from collect (Price(restaurant.id == $resId))
@@ -23,12 +23,12 @@ rule "when 70% or more dishes from restaurant are cheap => restaurant is cheap"
     then
         $r.setPriceCategory(PriceCategory.CHEAP);
         update($r);
-        System.out.println("Restaurant category is "+ $r.getPriceCategory()+ " all:" + $numOfAll.size());
+        System.out.println("Restaurant category is "+ $r.getPriceCategory()+ " id " + $resId);
 		
 end
 
 rule "when 70% or more dishes from restaurant are standard => restaurant is standard"
-
+	salience 70
     when
         $r : Restaurant($resId : id)
         $numOfAll : List() from collect (Price(restaurant.id == $resId))
@@ -37,12 +37,12 @@ rule "when 70% or more dishes from restaurant are standard => restaurant is stan
     then
         $r.setPriceCategory(PriceCategory.STANDARD);
         update($r);
-        System.out.println("Restaurant category is "+ $r.getPriceCategory()+ " all:" + $numOfAll.size());
+        System.out.println("Restaurant category is "+ $r.getPriceCategory()+  " id " + $resId);
 		
 end
 
 rule "when 70% or more dishes from restaurant are expensive => restaurant is expensive"
-
+	salience 60 
     when
         $r : Restaurant($resId : id)
         $numOfAll : List() from collect (Price(restaurant.id == $resId))
@@ -51,6 +51,6 @@ rule "when 70% or more dishes from restaurant are expensive => restaurant is exp
     then
         $r.setPriceCategory(PriceCategory.EXPENSIVE);
         update($r);
-        System.out.println("Restaurant category is "+ $r.getPriceCategory()+ " all:" + $numOfAll.size());
+        System.out.println("Restaurant category is "+ $r.getPriceCategory()+  " id " + $resId);
 		
 end

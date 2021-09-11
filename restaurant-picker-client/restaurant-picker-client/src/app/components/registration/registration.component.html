@@ -1,0 +1,42 @@
+<div style="background-image: url(../assets/food.jpg); width: 100%; height: 100%; background-size:cover;  padding-top: 150px; padding-bottom: 1;">
+    <div style="background-color: white; height: 50%; margin-left: 30%; width: 35%; padding-top: 20px;" class="mat-elevation-z8">
+        <div style ="margin: auto; justify-content: center; display: flex;">
+            <h2>Fill out this form in order to register</h2>
+        </div>
+            <div style ="margin: auto; justify-content: center; display: flex;">
+                <mat-form-field class="example-full-width" style="width: 80%;">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" [(ngModel)] = "name">
+                </mat-form-field>
+            </div>
+            <div style ="margin: auto; justify-content: center; display: flex;">
+                <mat-form-field class="example-full-width" style="width: 80%;">
+                    <mat-label>Surname</mat-label>
+                    <input matInput placeholder="Surname" [(ngModel)] = "surname">
+                </mat-form-field>
+            </div>
+            <div style ="margin: auto; justify-content: center; display: flex;">
+                <mat-form-field class="example-full-width" style="width: 80%;">
+                    <mat-label>Email</mat-label>
+                    <input matInput placeholder="Email" [(ngModel)] = "email">
+                </mat-form-field>
+            </div>
+            <div style ="margin: auto; justify-content: center; display: flex;">
+                <mat-form-field class="example-full-width" style="width: 80%;">
+                    <mat-label>Password</mat-label>
+                    <input type = "password" matInput placeholder="Password" [(ngModel)] = "password">
+                </mat-form-field>
+            </div>
+            
+            
+            <div style="justify-content: left; margin-left: 10%; width:auto;" >
+                <button mat-raised-button (click)="register(name,surname,email,password)">Register</button>
+             
+            <span style="float: right; margin-right: 10%;">
+                <button  mat-raised-button (click)="cancel()">Cancel</button>
+            </span>
+               
+            </div>
+            
+    </div>
+</div>

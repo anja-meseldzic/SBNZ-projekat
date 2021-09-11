@@ -1,0 +1,80 @@
+<div fxLayout = "column" style="margin: 3%;">
+    <div fxLayout="row wrap" fxLayoutAlign="center" fxLayoutAlign="space-between" >
+        <div>
+            <h4>Cuisine</h4>
+            <mat-form-field appearance="fill">
+                <mat-label>Choose an option</mat-label>
+                <mat-select [(ngModel)] = "search.cuisineType"> 
+                    <mat-option *ngFor = "let c of cuisines" [value] = "c">{{c}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+
+            <h4>Food type</h4>
+            <mat-form-field appearance="fill">
+                <mat-label>Choose an option</mat-label>
+                <mat-select [(ngModel)] = "search.foodType">
+                    <mat-option *ngFor = "let f of food" [value] = "f">{{f}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+
+            <h4>Delivery</h4>
+            <mat-form-field appearance="fill">
+                <mat-label>Choose an option</mat-label>
+                <mat-select [(ngModel)] = "search.delivery">
+                    <mat-option *ngFor = "let d of deliveries" [value] = "d">{{d}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <h4>Dish type</h4>
+            <mat-form-field appearance="fill">
+                <mat-label>Choose an option</mat-label>
+                <mat-select [(ngModel)] = "search.dishType">
+                    <mat-option *ngFor = "let di of dishes" [value] = "di">{{di}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <h4>Price range</h4>
+            <mat-form-field appearance="fill">
+                <mat-label>Choose an option</mat-label>
+                <mat-select [(ngModel)] = "search.price">
+                    <mat-option *ngFor = "let p of prices" [value] = "p">{{p}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="example-full-width" style="width: 80%;">
+                <mat-label>search</mat-label>
+                <input matInput placeholder="search..." [(ngModel)]="search.searchTerm">
+            </mat-form-field>
+            <button mat-stroked-button color="primary" (click) = "runSearch()">Search</button>
+        </div>
+
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="center" fxLayoutAlign="space-between" fxFlex="80%">
+        <div *ngFor = "let res of restaurants" class = "divCard">
+            <mat-card class="example-card" >
+                <mat-card-header>
+                    <mat-card-title>{{res.name}}</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="assets/alex-haney-CAhjZmVk5H4-unsplash.jpg">
+                <mat-card-content>
+                    <p>
+                        Cuisisne: {{res.cuisine}}
+                    </p>
+                    <p>Delivery: {{res.delivery}}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-stroked-button>Menu</button>
+                    
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>

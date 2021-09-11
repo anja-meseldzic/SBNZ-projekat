@@ -33,10 +33,13 @@ public class Restaurant {
 	
 	@Column(name = "priceCategory" , nullable = false)
 	private PriceCategory priceCategory;
+	
+	@Column(name = "cuisineType")
+	private CuisineType cusine;
 
 	public Restaurant() {}
 	
-	public Restaurant(long id, String name, Location location, Delivery delivery, List<Dish> menu,PriceCategory category) {
+	public Restaurant(long id, String name, Location location, Delivery delivery, List<Dish> menu,PriceCategory category, CuisineType cuisine) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -44,6 +47,7 @@ public class Restaurant {
 		this.delivery = delivery;
 		this.menu = menu;
 		this.priceCategory = category;
+		this.cusine = cuisine;
 	}
 
 	public long getId() {
@@ -93,8 +97,14 @@ public class Restaurant {
 	public void setPriceCategory(PriceCategory priceCategory) {
 		this.priceCategory = priceCategory;
 	}
-	
-	
+
+	public CuisineType getCusine() {
+		return cusine;
+	}
+
+	public void setCusine(CuisineType cusine) {
+		this.cusine = cusine;
+	}
 	
 	
 }

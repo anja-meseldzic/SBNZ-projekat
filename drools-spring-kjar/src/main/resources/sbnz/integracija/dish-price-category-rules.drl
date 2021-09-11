@@ -14,7 +14,7 @@ import sbnz.integracija.example.model.PriceCategory;
 
 
 rule "Calculate dish price category, if under average then it is cheap"
-
+	salience 100
     when
         $d : Dish($id : id)
         $r : Restaurant($resId : id)
@@ -33,7 +33,7 @@ end
 
 
 rule "Calculate dish price category, if above average then it is expensive"
-
+	salience 90
     when
         $d : Dish($id : id)
         $r : Restaurant($resId : id)
@@ -51,7 +51,7 @@ rule "Calculate dish price category, if above average then it is expensive"
 end
 
 rule "Calculate dish price category, if in average then it is standard"
-
+	salience 95
     when
         $d : Dish($id : id)
         $r : Restaurant($resId : id)

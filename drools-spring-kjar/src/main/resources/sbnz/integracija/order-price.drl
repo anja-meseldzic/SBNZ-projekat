@@ -1,0 +1,93 @@
+//created on: May 24, 2021
+package sbnz.integracija
+
+import sbnz.integracija.example.model.Order;
+import sbnz.integracija.example.model.Dish;
+import sbnz.integracija.example.model.Restaurant;
+import sbnz.integracija.example.model.Price;
+import sbnz.integracija.example.model.Discount;
+import sbnz.integracija.example.model.User;
+import sbnz.integracija.example.model.UserCategory;
+
+
+rule "Calculate dish price with discount from order"
+	no-loop
+    when
+       	$o: Order($resId : restaurant.id, $dishes : dishes)
+       	Dish($dishId : id) from $dishes
+       	$p : Price(dish.id == $dishId , restaurant.id == $resId, $price : price)
+       	Discount(dish.id == $dishId , restaurant.id == $resId, $discount: discount)
+    then
+        $p.setPrice($price * (100- $discount)/100);
+        update($p);
+        kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("total-price").setFocus();
+        System.out.println("izracunao je cenu " + $p.getPrice() + " jelo id " + $dishId + " popust " + $discount);
+end
+
+rule "Calculate total price of order when customers category NONE"
+	no-loop
+	agenda-group "total-price"
+    when
+    	$u :User ($uId : id, category == UserCategory.NONE)
+       	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
+   
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				$totalPrice : sum($price)
+       	)
+    then
+        $o.setTotalPrice($totalPrice.doubleValue());
+        update($o);
+        System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+end
+
+rule "Calculate total price of order when customers category SILVER (add discount 5%)"
+	no-loop
+	agenda-group "total-price"
+    when
+    	$u :User ($uId : id, category == UserCategory.SILVER)
+       	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
+   
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				$totalPrice : sum($price)
+       	)
+    then
+        $o.setTotalPrice($totalPrice * 0.95);
+        update($o);
+        System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+end
+
+rule "Calculate total price of order when customers category GOLD (add discount 10%)"
+	no-loop
+	agenda-group "total-price"
+    when
+    	$u :User ($uId : id, category == UserCategory.GOLD)
+       	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
+   
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				$totalPrice : sum($price)
+       	)
+    then
+        $o.setTotalPrice($totalPrice * 0.9);
+        update($o);
+        System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+end
+
+rule "Calculate total price of order when customers category PLATINUM (add discount 15%)"
+	no-loop
+	agenda-group "total-price"
+    when
+    	$u :User ($uId : id, category == UserCategory.PLATINUM)
+       	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
+   
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				$totalPrice : sum($price)
+       	)
+    then
+        $o.setTotalPrice($totalPrice*0.85);
+        update($o);
+        System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+end

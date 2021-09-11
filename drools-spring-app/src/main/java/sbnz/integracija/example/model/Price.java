@@ -32,7 +32,6 @@ public class Price {
 	public Price() {}
 	
 	
-	
 	public Price(long id, double price, Dish dish, Restaurant restaurant,PriceCategory category) {
 		super();
 		this.id = id;
