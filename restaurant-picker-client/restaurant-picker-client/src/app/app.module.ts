@@ -17,6 +17,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { RestaurantMenuComponent } from './components/restaurant-menu/restaurant-menu.component';
+import {MatTableModule} from '@angular/material/table';
 
 
 
@@ -27,7 +29,8 @@ import { MatCardModule } from '@angular/material/card';
     LandingPageComponent,
     LoginComponent,
     RegistrationComponent,
-    HomePageComponent
+    HomePageComponent,
+    RestaurantMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ import { MatCardModule } from '@angular/material/card';
     HttpClientModule,
     MatSelectModule,
     FlexLayoutModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule
 
   ],
   providers: [],

@@ -1,5 +1,5 @@
 //created on: May 23, 2021
-package integracija
+package sbnz.integracija
 
 //list any import classes here.
 import java.util.List;
@@ -63,9 +63,9 @@ end
 rule "Reccommend expensive restaurants when most of orders from expensive restaurants"
 	when
 		$u : User($id : id)
-		PreviousRestaurants(userId == $id, category == PriceCategory.EXPENSIVE, $expensive : numberOfRes)
-		PreviousRestaurants(userId == $id, category == PriceCategory.CHEAP, $cheap : numberOfRes)
-		PreviousRestaurants(userId == $id, category == PriceCategory.STANDARD, $standard : numberOfRes)
+		PreviousRestaurants(userId == $id, category == PriceCategory.EXPENSIVE, $expensive : number)
+		PreviousRestaurants(userId == $id, category == PriceCategory.CHEAP, $cheap : number)
+		PreviousRestaurants(userId == $id, category == PriceCategory.STANDARD, $standard : number)
 		eval($expensive > $cheap) 
 		eval($expensive > $standard)
 	then
@@ -75,9 +75,9 @@ end
 rule "Reccommend cheap restaurants when most of orders from cheap restaurants"
 	when
 		$u : User($id : id)
-		PreviousRestaurants(userId == $id, category == PriceCategory.EXPENSIVE, $expensive : numberOfRes)
-		PreviousRestaurants(userId == $id, category == PriceCategory.CHEAP, $cheap : numberOfRes)
-		PreviousRestaurants(userId == $id, category == PriceCategory.STANDARD, $standard : numberOfRes)
+		PreviousRestaurants(userId == $id, category == PriceCategory.EXPENSIVE, $expensive : number)
+		PreviousRestaurants(userId == $id, category == PriceCategory.CHEAP, $cheap : number)
+		PreviousRestaurants(userId == $id, category == PriceCategory.STANDARD, $standard : number)
 		eval($cheap > $expensive) 
 		eval($cheap > $standard)
 	then

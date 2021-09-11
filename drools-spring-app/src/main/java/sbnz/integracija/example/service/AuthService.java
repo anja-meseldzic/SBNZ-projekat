@@ -1,6 +1,7 @@
 package sbnz.integracija.example.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.kie.api.internal.utils.KieService;
@@ -9,8 +10,14 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sbnz.integracija.example.model.Dish;
+import sbnz.integracija.example.model.Price;
+import sbnz.integracija.example.model.Restaurant;
 import sbnz.integracija.example.model.User;
 import sbnz.integracija.example.model.UserRole;
+import sbnz.integracija.example.repository.DishRepository;
+import sbnz.integracija.example.repository.PriceRepository;
+import sbnz.integracija.example.repository.RestaurantRepository;
 import sbnz.integracija.example.repository.UserRepository;
 import sbnz.integracija.example.util.JwtUtil;
 import sbnz.integracija.example.util.UserClaims;
@@ -20,13 +27,20 @@ public class AuthService {
 
 	private JwtUtil jwtUtil;
 	private UserRepository userRepo;
+	private PriceRepository priceRepo;
+	private RestaurantRepository resRepo;
+	private DishRepository dishRepo;
 	private final KieContainer kieContainer;
 
 	@Autowired
-	public AuthService(JwtUtil jwtUtil, UserRepository repo, KieContainer kieContainer) {
+	public AuthService(JwtUtil jwtUtil, UserRepository repo, KieContainer kieContainer,PriceRepository priceRepo,
+			DishRepository dishRepo, RestaurantRepository resRepo) {
 		this.jwtUtil = jwtUtil;
 		this.userRepo = repo;
 		this.kieContainer = kieContainer;
+		this.priceRepo = priceRepo;
+		this.dishRepo = dishRepo;
+		this.resRepo = resRepo;
 	}
 
 	public boolean register(User user) throws Exception {
@@ -34,6 +48,9 @@ public class AuthService {
 			userRepo.save(user);
 			KieSession kieSession = kieContainer.newKieSession();
 			kieSession.insert(user);
+			insertaDataFromDataBase(kieSession);
+			kieSession.fireAllRules();
+			kieSession.dispose();
 			return true;
 		} else {
 			throw new Exception();
@@ -79,6 +96,51 @@ public class AuthService {
 			return user;
 		}else {
 			throw new Exception();
+		}
+	}
+	
+	public void insertaDataFromDataBase(KieSession kieSession) {
+		List<User> users = userRepo.findAll();
+		List<Restaurant> restaurants =  resRepo.findAll();
+		List<Price> prices = priceRepo.findAll();
+		List<Dish> dishes = dishRepo.findAll();
+		
+		for (Dish d : dishes) {
+			kieSession.insert(d);
+		}
+		
+		for (Price p : prices) {
+			kieSession.insert(p);
+		}
+		
+		for (Restaurant r : restaurants) {
+			kieSession.insert(r);
+		}
+
+		for (User u : users) {
+			kieSession.insert(u);
+		}
+	}
+	private void saveToDb() {
+		List<User> users = userRepo.findAll();
+		List<Restaurant> restaurants =  resRepo.findAll();
+		List<Price> prices = priceRepo.findAll();
+		List<Dish> dishes = dishRepo.findAll();
+		
+		for (Dish d : dishes) {
+			dishRepo.save(d);
+		}
+		
+		for (Price p : prices) {
+			priceRepo.save(p);
+		}
+		
+		for (Restaurant r : restaurants) {
+			resRepo.save(r);
+		}
+
+		for (User u : users) {
+			userRepo.save(u);
 		}
 	}
 }

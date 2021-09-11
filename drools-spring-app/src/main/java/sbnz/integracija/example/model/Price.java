@@ -26,7 +26,7 @@ public class Price {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Restaurant restaurant;
 	
-	@Column(name = "priceCategory", nullable = false)
+	@Column(name = "priceCategory")
 	private PriceCategory priceCategory;
 
 	public Price() {}

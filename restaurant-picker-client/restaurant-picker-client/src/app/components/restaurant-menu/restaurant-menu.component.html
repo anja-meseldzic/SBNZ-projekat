@@ -1,0 +1,93 @@
+<div *ngIf="!restaurant.menu || restaurant.menu.length===0">
+    <h4 >&nbsp;&nbsp;Restaurant is not ready for orders.</h4>
+</div>
+<div class="table-responsive" style = "width: 95%; margin: auto; padding: 2%;" *ngIf="restaurant.menu && restaurant.menu.length > 0">
+    <mat-card class="example-card">
+        <mat-card-header>
+            <mat-card-title>{{restaurant.name}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="assets/alex-haney-CAhjZmVk5H4-unsplash.jpg">
+        <mat-card-content>
+          <div  fxLayout="row wrap" fxLayoutAlign="center" fxLayoutAlign="space-between">
+            <table style="width:60%;" mat-table [dataSource]="restaurant.menu" class="mat-elevation-z8">
+              
+                <!-- Name Column -->
+                <ng-container matColumnDef="Name">
+                  <th mat-header-cell *matHeaderCellDef> Name </th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+              
+                <!-- Weight Column -->
+                <ng-container matColumnDef="Price">
+                  <th mat-header-cell *matHeaderCellDef> Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Dishtype">
+                    <th mat-header-cell *matHeaderCellDef> Dishtype </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dishType}} </td>
+                  </ng-container>
+              
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="Foodtype">
+                  <th mat-header-cell *matHeaderCellDef> Foodtype </th>
+                  <td mat-cell *matCellDef="let element"> {{element.foodType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Add to order </th>
+                    <td mat-cell *matCellDef="let element"> <button mat-stroked-button color = "primary" (click)="addToOrder(element)">Add to order</button></td>
+                  </ng-container>
+              
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+              <table style="width:35%" mat-table [dataSource]="order" #orderTable class="mat-elevation-z8">
+              
+                <ng-container matColumnDef="table-name">
+                  <th mat-header-cell *matHeaderCellDef colspan="3"><h2>My order</h2></th>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="Name">
+                  <th mat-header-cell *matHeaderCellDef> Name </th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+              
+                
+                <ng-container matColumnDef="Price">
+                  <th mat-header-cell *matHeaderCellDef> Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Remove from order </th>
+                    <td mat-cell *matCellDef="let element"> <button mat-stroked-button (click)="removeFromOrder(element)">Remove from order</button></td>
+                    <td mat-footer-cell *matFooterCellDef>{{totalPrice}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="disclaimer">
+                    <td mat-footer-cell *matFooterCellDef colspan="3">
+                      <p *ngIf = "order.length > 0">Total price is: {{totalPrice}}</p>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="disclaimer1">
+                    <td mat-footer-cell *matFooterCellDef colspan="3"  >
+                      <button *ngIf = "order.length > 0" mat-stroked-button (click)="goToCheckout(order)">Go to checkout</button>
+                    </td>
+                  </ng-container>
+                <tr mat-header-row *matHeaderRowDef="['table-name']"
+                  class="example-second-header-row">
+                </tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                <tr mat-footer-row *matFooterRowDef="['disclaimer']" class="example-second-footer-row"></tr>
+                <tr mat-footer-row *matFooterRowDef="['disclaimer1']" class="example-second-footer-row"></tr>
+              </table>
+           </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-stroked-button (click)="goToMenu(res.name)">Go Back</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

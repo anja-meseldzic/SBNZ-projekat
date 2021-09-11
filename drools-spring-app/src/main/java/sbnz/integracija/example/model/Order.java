@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,13 +22,13 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Dish> dishes;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Restaurant restaurant;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne
 	private User user;
 	
 	@Column(name = "price", nullable = false)

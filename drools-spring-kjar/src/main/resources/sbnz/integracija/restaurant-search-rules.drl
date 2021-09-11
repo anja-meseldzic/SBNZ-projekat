@@ -1,5 +1,5 @@
 //created on: Sep 10, 2021
-package integracija
+package sbnz.integracija
 
 import java.util.List;
 import sbnz.integracija.example.model.Restaurant;
@@ -13,7 +13,7 @@ import sbnz.integracija.example.model.CuisineType;
 import sbnz.integracija.example.model.DishType;
 
 //declare any global variables here
-
+/*
 global String _name;
 global FoodType _foodType;
 global PriceCategory _price;
@@ -46,3 +46,4 @@ rule "Your Second Rule"
         //actions
 
 end
+*/

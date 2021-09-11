@@ -6,9 +6,15 @@ public class RestaurantDTO {
 
 	private String name;
 	private String cuisine;
-	
 	private String delivery;
+	private List<DishDTO> menu;
 	
+	public List<DishDTO> getMenu() {
+		return menu;
+	}
+	public void setMenu(List<DishDTO> menu) {
+		this.menu = menu;
+	}
 	public String getName() {
 		return name;
 	}
@@ -32,11 +38,11 @@ public class RestaurantDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public RestaurantDTO(String name, String cuisine, String delivery) {
+	public RestaurantDTO(String name, String cuisine, String delivery ,List<DishDTO> menu) {
 		super();
 		this.name = name;
 		this.cuisine = cuisine;
-		
+		this.menu = menu;
 		this.delivery = delivery;
 	}
 	

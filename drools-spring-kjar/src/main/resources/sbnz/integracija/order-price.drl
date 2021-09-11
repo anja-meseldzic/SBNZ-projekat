@@ -39,6 +39,7 @@ rule "Calculate total price of order when customers category NONE"
         $o.setTotalPrice($totalPrice.doubleValue());
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+        kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();
 end
 
 rule "Calculate total price of order when customers category SILVER (add discount 5%)"
@@ -56,6 +57,7 @@ rule "Calculate total price of order when customers category SILVER (add discoun
         $o.setTotalPrice($totalPrice * 0.95);
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();
 end
 
 rule "Calculate total price of order when customers category GOLD (add discount 10%)"
@@ -73,6 +75,7 @@ rule "Calculate total price of order when customers category GOLD (add discount 
         $o.setTotalPrice($totalPrice * 0.9);
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();
 end
 
 rule "Calculate total price of order when customers category PLATINUM (add discount 15%)"
@@ -90,4 +93,5 @@ rule "Calculate total price of order when customers category PLATINUM (add disco
         $o.setTotalPrice($totalPrice*0.85);
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
+        kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();
 end

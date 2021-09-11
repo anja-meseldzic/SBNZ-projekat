@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RestaurantDto } from 'src/app/model/restaurant-dto';
 import { SearchDTO } from 'src/app/model/search-dto';
 import { RestaurantService } from 'src/app/service/restaurant.service';
@@ -16,8 +17,8 @@ export class HomePageComponent implements OnInit {
   prices = [];
   deliveries =[];
   food =[];
-  restaurants : RestaurantDto[];
-  constructor(private restaurantService : RestaurantService) { }
+  restaurants : RestaurantDto[] = [];
+  constructor(private restaurantService : RestaurantService,private router: Router) { }
 
   ngOnInit(): void {
     this.restaurantService.getCuisineType().subscribe(data => {
@@ -35,9 +36,9 @@ export class HomePageComponent implements OnInit {
     this.restaurantService.getPriceType().subscribe(data => {
       this.prices = data;
     });
-    this.restaurantService.getRestaurants().subscribe(
-      data => this.restaurants = data
-    )
+    this.restaurantService.getRestaurants().subscribe(data =>{
+      this.restaurants = data;
+    })
   }
 
   runSearch(){
@@ -45,5 +46,8 @@ export class HomePageComponent implements OnInit {
   }
 
 
+  goToMenu(name: string) {
+    this.router.navigate(([`/restaurant-menu/`+ name]));
+  }
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -28,10 +29,10 @@ public class Restaurant {
 	@Column(name = "delivery")
 	private Delivery delivery;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Dish> menu;
 	
-	@Column(name = "priceCategory" , nullable = false)
+	@Column(name = "priceCategory")
 	private PriceCategory priceCategory;
 	
 	@Column(name = "cuisineType")

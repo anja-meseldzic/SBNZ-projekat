@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Dish } from '../model/dish';
 import { RestaurantDto } from '../model/restaurant-dto';
 
 @Injectable({
@@ -30,4 +31,12 @@ export class RestaurantService {
   public getDeliveryType(): Observable<string[]>{
     return this.http.get<string[]>(environment.baseUrl + 'restaurants/deliveryTypes');
   }
+  public getByName(name : string) : Observable<RestaurantDto>{
+    return this.http.get<RestaurantDto>(environment.baseUrl + 'restaurants/getOne/' + name);
+  }
+  public calculateOrderPrice(order : Dish[],name : string) : Observable<any>{
+    return this.http.post(environment.baseUrl + 'restaurants/calculatePrice/' + name, order,{responseType: 'text'});
+  }
+
+
 }
