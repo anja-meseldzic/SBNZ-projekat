@@ -13,6 +13,7 @@ import sbnz.integracija.example.dto.DishDTO;
 import sbnz.integracija.example.dto.RestaurantDTO;
 import sbnz.integracija.example.model.Dish;
 import sbnz.integracija.example.model.Order;
+import sbnz.integracija.example.model.Price;
 import sbnz.integracija.example.model.Restaurant;
 import sbnz.integracija.example.model.User;
 import sbnz.integracija.example.model.UserCategory;
@@ -58,29 +59,37 @@ public class RestaurantService {
 		return restaurantRepository.findByName(name);
 	}
 
-	public double calculateTotalPrice(String name, List<DishDTO> dtos)  {
-		Restaurant r = getRestaurantByName(name);
-		User u  = userRepo.findByEmail("v@gmail.com");
+	public String calculateTotalPrice(String name, List<DishDTO> dtos,User u) {
+		Restaurant r = getRestaurantByName(name);	
 		Order o = new Order();
 		o.setUser(u);
 		o.setRestaurant(r);
+		
 		List<Dish> dishes = new ArrayList<Dish>();
+		
 		for(DishDTO dto : dtos) {
 			Dish d = dishRepo.findById(dto.getId()).get();
 			dishes.add(d);
+			
 		}
 		o.setDishes(dishes);
+		
 		KieSession kieSession  = kieContainer.newKieSession();
 		kieSession.getAgenda().getAgendaGroup("total-price").setFocus();
+		
 		authService.insertaDataFromDataBase(kieSession);
 		orderRepo.save(o);
+
 		for(Order or : orderRepo.findAll()) {
 			kieSession.insert(or);
 		}
-		//kieSession.insert(o);
+		
 		kieSession.fireAllRules();
 		kieSession.dispose();
-		return o.getTotalPrice();
+		
+		double totalPrice = o.getTotalPrice();
+		
+		return  u.getCategory().toString() + "-" + String.valueOf(totalPrice);
 
 	}
 }

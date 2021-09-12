@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserDTO } from '../model/user-dto';
+import decode from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +35,12 @@ export class AuthService {
       return true;
     }
     return false;
-    
+  }
+
+  getRole() {
+    if (!this.isLoggedin()) return '';
+    const token = localStorage.getItem('token');
+    const tokenPayload = decode(token);
+    return tokenPayload['role'];
   }
 }

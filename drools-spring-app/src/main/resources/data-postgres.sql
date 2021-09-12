@@ -51,4 +51,5 @@ insert into restaurant_menu(restaurant_id, menu_id) values (3,6);
 insert into restaurant_menu(restaurant_id, menu_id) values (4,7);
 insert into restaurant_menu(restaurant_id, menu_id) values (3,7);
 
-
+insert into discount(id, discount, start_date, end_date, dish_id, restaurant_id) values (1, 10, '2021-09-10 08:00:00', '2021-09-20 08:00:00',1,1);
+insert into discount(id, discount, start_date, end_date, dish_id, restaurant_id) values (2, 10, '2021-09-10 08:00:00', '2021-09-20 08:00:00' ,2,1);

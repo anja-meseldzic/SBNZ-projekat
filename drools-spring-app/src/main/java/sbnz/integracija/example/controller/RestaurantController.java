@@ -25,6 +25,8 @@ import sbnz.integracija.example.model.FoodType;
 import sbnz.integracija.example.model.Price;
 import sbnz.integracija.example.model.PriceCategory;
 import sbnz.integracija.example.model.Restaurant;
+import sbnz.integracija.example.model.User;
+import sbnz.integracija.example.service.AuthService;
 import sbnz.integracija.example.service.PriceService;
 import sbnz.integracija.example.service.RestaurantService;
 import sbnz.integracija.example.util.JwtUtil;
@@ -36,10 +38,13 @@ public class RestaurantController {
 	private RestaurantService resService;
 	private PriceService priceService;
 	private JwtUtil jwtUtil;
+	private AuthService authService;
 
-	public RestaurantController(RestaurantService resService, PriceService priceService) {
+	public RestaurantController(RestaurantService resService, PriceService priceService, JwtUtil jwtUtil, AuthService authService) {
 		this.resService = resService;
 		this.priceService = priceService;
+		this.jwtUtil = jwtUtil;
+		this.authService = authService;
 	}
 
 	@GetMapping(value = "all")
@@ -125,11 +130,11 @@ public class RestaurantController {
 	}
 	
 	@PostMapping(value = "calculatePrice/{name}")
-	public String calculateTotalPrice(HttpServletRequest request,@PathVariable("name") String name, @RequestBody List<DishDTO> dtos) {
-		//String jwtToken = jwtUtil.getJwtFromRequest(request);
-		
-			double price  = resService.calculateTotalPrice(name,dtos);
-			return String.valueOf(price);
+	public String calculateTotalPrice(HttpServletRequest request,@PathVariable("name") String name, @RequestBody List<DishDTO> dtos) throws Exception {
+			String jwtToken = jwtUtil.getJwtFromRequest(request);
+			User u = authService.getLogedInUser(jwtToken);
+			String retVal  = resService.calculateTotalPrice(name,dtos,u);
+			return String.valueOf(retVal);
 		
 		
 	}

@@ -19,6 +19,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { RestaurantMenuComponent } from './components/restaurant-menu/restaurant-menu.component';
 import {MatTableModule} from '@angular/material/table';
+import { AuthInterceptorService } from './interceptors/auth-interceptor.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 
@@ -31,6 +33,7 @@ import {MatTableModule} from '@angular/material/table';
     RegistrationComponent,
     HomePageComponent,
     RestaurantMenuComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,11 @@ import {MatTableModule} from '@angular/material/table';
     MatTableModule
 
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

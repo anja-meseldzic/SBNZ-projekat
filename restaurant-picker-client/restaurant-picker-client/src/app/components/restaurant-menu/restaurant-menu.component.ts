@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Dish } from 'src/app/model/dish';
 import { RestaurantDto } from 'src/app/model/restaurant-dto';
 import { RestaurantService } from 'src/app/service/restaurant.service';
 import { MatTable } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-restaurant-menu',
@@ -19,16 +20,19 @@ export class RestaurantMenuComponent implements OnInit {
         this.myTable.renderRows();
 
 }
-  restaurant: RestaurantDto;
+  restaurant: RestaurantDto = new RestaurantDto();
   restaurantName: string; 
   displayedColumns: string[] = ['Name', 'Price', 'Dishtype', 'Foodtype', 'action'];
   displayedColumns1: string[] = ['Name', 'Price',  'action'];
+  discountPercentage: string = '';
   order: Dish[] = [];
   totalPrice: number = 0;
+  discountedPrice : number = 0;
+  category : string = "";
 
   
 
-  constructor(private route: ActivatedRoute, private restaurantService : RestaurantService) { }
+  constructor(private route: ActivatedRoute, private restaurantService : RestaurantService, private router : Router, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.restaurantName = this.route.snapshot.paramMap.get('restaurantName');
@@ -53,7 +57,31 @@ export class RestaurantMenuComponent implements OnInit {
 
   }
   goToCheckout(order : Dish[]){
-    this.restaurantService.calculateOrderPrice(order, this.restaurantName).subscribe(data => console.log(data));
+   
+    this.restaurantService.calculateOrderPrice(order, this.restaurantName).subscribe(data => {
+      
+      this.discountedPrice = Number(data.split("-")[1]);
+      this.category = data.split("-")[0];
+      if (this.category == 'SILVER') {
+        this.discountPercentage = '5%'
+      }
+      else if (this.category == 'GOLD') {
+        this.discountPercentage = '10%'
+      }
+      else if (this.category == 'PLATINUM') {
+        this.discountPercentage = '15%'
+      }
+      console.log(this.category);
+      console.log(data);
+    }
+    );
+
+  }
+  orderSave(){
+    this.discountedPrice = 0;
+    this.order = [];
+    this.totalPrice = 0;
+    this.snackBar.open("Thank you for your order", "OK");
   }
 
 }

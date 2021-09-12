@@ -5,15 +5,14 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { RestaurantMenuComponent } from './components/restaurant-menu/restaurant-menu.component';
+import { RouteGuardService } from './guards/route-guard.service';
 
 const routes: Routes = [
-  {path: '', component: LandingPageComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegistrationComponent},
-  {path: 'home', component: HomePageComponent},
-  { path: 'restaurant-menu/:restaurantName', component: RestaurantMenuComponent},
-
-
+  { path: '', component: LandingPageComponent, canActivate: [RouteGuardService], data: { expectedRoles: [] } },
+  { path: 'login', component: LoginComponent, canActivate: [RouteGuardService], data: { expectedRoles: [] } },
+  { path: 'register', component: RegistrationComponent, canActivate: [RouteGuardService], data: { expectedRoles: [] } },
+  { path: 'home', component: HomePageComponent, canActivate: [RouteGuardService], data: { expectedRoles: ['REGULAR_USER'] } },
+  { path: 'restaurant-menu/:restaurantName', component: RestaurantMenuComponent, canActivate: [RouteGuardService], data: { expectedRoles: ['REGULAR_USER'] } },
 ];
 
 @NgModule({

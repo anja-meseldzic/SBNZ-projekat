@@ -47,6 +47,7 @@
                 <ng-container matColumnDef="table-name">
                   <th mat-header-cell *matHeaderCellDef colspan="3"><h2>My order</h2></th>
                 </ng-container>
+
                 <!-- Name Column -->
                 <ng-container matColumnDef="Name">
                   <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -71,17 +72,28 @@
                       <p *ngIf = "order.length > 0">Total price is: {{totalPrice}}</p>
                     </td>
                   </ng-container>
-                  <ng-container matColumnDef="disclaimer1">
-                    <td mat-footer-cell *matFooterCellDef colspan="3"  >
-                      <button *ngIf = "order.length > 0" mat-stroked-button (click)="goToCheckout(order)">Go to checkout</button>
+
+                  <ng-container matColumnDef="disclaimer2">
+                    <td mat-footer-cell *matFooterCellDef colspan="3">
+                      <p *ngIf = "discountedPrice != totalPrice && discountedPrice > 0">Price with discount is: {{discountedPrice}}</p>
+                      <p *ngIf = "discountedPrice == totalPrice && totalPrice != 0"> No discount</p>
+                      <p *ngIf = "discountedPrice != totalPrice && discountedPrice > 0">User category : {{category}}, discount is : {{discountPercentage}}</p>
                     </td>
                   </ng-container>
+                  <ng-container matColumnDef="disclaimer1">
+                    <td mat-footer-cell *matFooterCellDef colspan="3"  >
+                      <button *ngIf = "order.length > 0 && discountedPrice == 0" mat-stroked-button (click)="goToCheckout(order)">Go to checkout</button>
+                      <button *ngIf = "discountedPrice > 0" mat-stroked-button (click)="orderSave()">Order</button>
+                    </td>
+                  </ng-container>
+                 
                 <tr mat-header-row *matHeaderRowDef="['table-name']"
                   class="example-second-header-row">
                 </tr>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
                 <tr mat-footer-row *matFooterRowDef="['disclaimer']" class="example-second-footer-row"></tr>
+                <tr mat-footer-row *matFooterRowDef="['disclaimer2']" class="example-second-footer-row"></tr>
                 <tr mat-footer-row *matFooterRowDef="['disclaimer1']" class="example-second-footer-row"></tr>
               </table>
            </div>

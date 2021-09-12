@@ -11,19 +11,9 @@ import { AuthService } from './service/auth.service';
 export class AppComponent {
   title = 'Restaurant picker';
   showButton : boolean = false;
-  constructor(private authService : AuthService, private router : Router){}
+  constructor(public authService : AuthService){}
   
   ngOnInit(): void {
-    this.loggedIn();
-  }
-
-  logOut(){
-    this.authService.logOut();
-    this.router.navigate(['/']);
-    this.showButton = false;
-  }
-  loggedIn(){
-    this.authService.isLoggedin();
-    this.showButton = true
+   
   }
 }

@@ -10,11 +10,13 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sbnz.integracija.example.model.Discount;
 import sbnz.integracija.example.model.Dish;
 import sbnz.integracija.example.model.Price;
 import sbnz.integracija.example.model.Restaurant;
 import sbnz.integracija.example.model.User;
 import sbnz.integracija.example.model.UserRole;
+import sbnz.integracija.example.repository.DiscountRepository;
 import sbnz.integracija.example.repository.DishRepository;
 import sbnz.integracija.example.repository.PriceRepository;
 import sbnz.integracija.example.repository.RestaurantRepository;
@@ -31,16 +33,18 @@ public class AuthService {
 	private RestaurantRepository resRepo;
 	private DishRepository dishRepo;
 	private final KieContainer kieContainer;
+	private DiscountRepository discRepo;
 
 	@Autowired
 	public AuthService(JwtUtil jwtUtil, UserRepository repo, KieContainer kieContainer,PriceRepository priceRepo,
-			DishRepository dishRepo, RestaurantRepository resRepo) {
+			DishRepository dishRepo, RestaurantRepository resRepo, DiscountRepository discountRepository) {
 		this.jwtUtil = jwtUtil;
 		this.userRepo = repo;
 		this.kieContainer = kieContainer;
 		this.priceRepo = priceRepo;
 		this.dishRepo = dishRepo;
 		this.resRepo = resRepo;
+		this.discRepo = discountRepository;
 	}
 
 	public boolean register(User user) throws Exception {
@@ -104,6 +108,7 @@ public class AuthService {
 		List<Restaurant> restaurants =  resRepo.findAll();
 		List<Price> prices = priceRepo.findAll();
 		List<Dish> dishes = dishRepo.findAll();
+		List<Discount> discounts = discRepo.findAll();
 		
 		for (Dish d : dishes) {
 			kieSession.insert(d);
@@ -119,6 +124,9 @@ public class AuthService {
 
 		for (User u : users) {
 			kieSession.insert(u);
+		}
+		for(Discount d : discounts) {
+			kieSession.insert(d);
 		}
 	}
 	private void saveToDb() {

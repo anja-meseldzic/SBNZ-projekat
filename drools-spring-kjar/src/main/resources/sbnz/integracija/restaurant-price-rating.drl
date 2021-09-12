@@ -42,7 +42,7 @@ rule "when 70% or more dishes from restaurant are standard => restaurant is stan
 end
 
 rule "when 70% or more dishes from restaurant are expensive => restaurant is expensive"
-	salience 60 
+	salience 60
     when
         $r : Restaurant($resId : id)
         $numOfAll : List() from collect (Price(restaurant.id == $resId))

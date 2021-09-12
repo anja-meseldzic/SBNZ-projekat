@@ -8,53 +8,72 @@ import sbnz.integracija.example.model.Price;
 import sbnz.integracija.example.model.Discount;
 import sbnz.integracija.example.model.User;
 import sbnz.integracija.example.model.UserCategory;
+import java.time.LocalDateTime;
+
+declare PriceDiscount
+	dishId : long
+	discount : int
+end
 
 
 rule "Calculate dish price with discount from order"
 	no-loop
+	salience 100
+	agenda-group "total-price"
     when
        	$o: Order($resId : restaurant.id, $dishes : dishes)
        	Dish($dishId : id) from $dishes
        	$p : Price(dish.id == $dishId , restaurant.id == $resId, $price : price)
        	Discount(dish.id == $dishId , restaurant.id == $resId, $discount: discount)
     then
-        $p.setPrice($price * (100- $discount)/100);
-        update($p);
-        kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("total-price").setFocus();
+        insert(new PriceDiscount($dishId, $discount));
+        System.out.println("Ubacio novi objekat jelo: " + $dishId + " popust: " + $discount);
         System.out.println("izracunao je cenu " + $p.getPrice() + " jelo id " + $dishId + " popust " + $discount);
 end
 
 rule "Calculate total price of order when customers category NONE"
 	no-loop
+	salience 80
 	agenda-group "total-price"
     when
     	$u :User ($uId : id, category == UserCategory.NONE)
        	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
-   
+   		PriceDiscount($dId : dishId, $disc : discount )
        	accumulate( Dish($dishId : id) from $dishes and
-       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				Price($p : this, dish.id == $dishId, dish.id != $dId, restaurant.id == $resId, $price : price),
        				$totalPrice : sum($price)
        	)
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, dish.id == $dId, restaurant.id == $resId, $price : price),
+       				$totalPrice1 : sum($price * (100- $disc)/100)
+       	)
     then
-        $o.setTotalPrice($totalPrice.doubleValue());
+        $o.setTotalPrice(($totalPrice.doubleValue() + $totalPrice1.doubleValue()));
+        update($o);
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();
 end
 
+
 rule "Calculate total price of order when customers category SILVER (add discount 5%)"
 	no-loop
+	salience 80
 	agenda-group "total-price"
     when
     	$u :User ($uId : id, category == UserCategory.SILVER)
        	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
-   
+   		PriceDiscount($dId : dishId, $disc : discount )
        	accumulate( Dish($dishId : id) from $dishes and
-       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				Price($p : this, dish.id == $dishId, dish.id != $dId, restaurant.id == $resId, $price : price),
        				$totalPrice : sum($price)
        	)
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, dish.id == $dId, restaurant.id == $resId, $price : price),
+       				$totalPrice1 : sum($price * (100- $disc)/100)
+       	)
     then
-        $o.setTotalPrice($totalPrice * 0.95);
+        $o.setTotalPrice(($totalPrice.doubleValue() + $totalPrice1.doubleValue())* 0.95);
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
          kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();
@@ -62,17 +81,22 @@ end
 
 rule "Calculate total price of order when customers category GOLD (add discount 10%)"
 	no-loop
+	salience 80
 	agenda-group "total-price"
     when
     	$u :User ($uId : id, category == UserCategory.GOLD)
        	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
-   
+   		PriceDiscount($dId : dishId, $disc : discount )
        	accumulate( Dish($dishId : id) from $dishes and
-       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				Price($p : this, dish.id == $dishId, dish.id != $dId, restaurant.id == $resId, $price : price),
        				$totalPrice : sum($price)
        	)
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, dish.id == $dId, restaurant.id == $resId, $price : price),
+       				$totalPrice1 : sum($price * (100- $disc)/100)
+       	)
     then
-        $o.setTotalPrice($totalPrice * 0.9);
+        $o.setTotalPrice(($totalPrice.doubleValue() + $totalPrice1.doubleValue())* 0.90);
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
          kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();
@@ -80,17 +104,22 @@ end
 
 rule "Calculate total price of order when customers category PLATINUM (add discount 15%)"
 	no-loop
+	salience 80
 	agenda-group "total-price"
     when
     	$u :User ($uId : id, category == UserCategory.PLATINUM)
        	$o: Order(user.id == $uId, $resId : restaurant.id, $dishes : dishes)
-   
+   		PriceDiscount($dId : dishId, $disc : discount )
        	accumulate( Dish($dishId : id) from $dishes and
-       				Price($p : this, dish.id == $dishId, restaurant.id == $resId, $price : price),
+       				Price($p : this, dish.id == $dishId, dish.id != $dId, restaurant.id == $resId, $price : price),
        				$totalPrice : sum($price)
        	)
+       	accumulate( Dish($dishId : id) from $dishes and
+       				Price($p : this, dish.id == $dishId, dish.id == $dId, restaurant.id == $resId, $price : price),
+       				$totalPrice1 : sum($price * (100- $disc)/100)
+       	)
     then
-        $o.setTotalPrice($totalPrice*0.85);
+        $o.setTotalPrice(($totalPrice.doubleValue() + $totalPrice1.doubleValue())* 0.85);
         update($o);
         System.out.println("Ukupna cena narudzbine je:" + $totalPrice );
         kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("MAIN").setFocus();

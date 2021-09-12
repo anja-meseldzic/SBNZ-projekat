@@ -7,6 +7,7 @@ import sbnz.integracija.example.model.Restaurant;
 import sbnz.integracija.example.model.PriceCategory;
 import sbnz.integracija.example.model.User;
 import sbnz.integracija.example.model.Order;
+import sbnz.integracija.example.model.Reccommendation;
 
 
 //declare any global variables here
@@ -17,7 +18,8 @@ declare PreviousRestaurants
 end
 
 rule "Calculate number of previous orders from cheap restaurants for users"
-
+	salience 80
+	agenda-group "reccommendations"
     when
         $u: User($uId : id)
         accumulate (Order(user.id == $uId, $resId : restaurant.id) and
@@ -31,7 +33,8 @@ rule "Calculate number of previous orders from cheap restaurants for users"
 end
 
 rule "Calculate number of previous orders from standard restaurants for users"
-
+	salience 70
+	agenda-group "reccommendations"
     when
         $u: User($uId : id)
         $cheap : Number() from accumulate (
@@ -46,7 +49,8 @@ rule "Calculate number of previous orders from standard restaurants for users"
 end
 
 rule "Calculate number of previous orders from expensive restaurants for users"
-
+	salience 60
+	agenda-group "reccommendations"
     when
         $u: User($uId : id)
         $cheap : Number() from accumulate (
@@ -61,6 +65,8 @@ rule "Calculate number of previous orders from expensive restaurants for users"
 end
 
 rule "Reccommend expensive restaurants when most of orders from expensive restaurants"
+	salience 55
+	agenda-group "reccommendations"
 	when
 		$u : User($id : id)
 		PreviousRestaurants(userId == $id, category == PriceCategory.EXPENSIVE, $expensive : number)
@@ -73,6 +79,8 @@ rule "Reccommend expensive restaurants when most of orders from expensive restau
 end
 
 rule "Reccommend cheap restaurants when most of orders from cheap restaurants"
+	salience 50
+	agenda-group "reccommendations"
 	when
 		$u : User($id : id)
 		PreviousRestaurants(userId == $id, category == PriceCategory.EXPENSIVE, $expensive : number)
@@ -85,6 +93,8 @@ rule "Reccommend cheap restaurants when most of orders from cheap restaurants"
 end
 
 rule "Reccommend standard restaurants when most of orders from standard restaurants"
+	salience 45
+	agenda-group "reccommendations"
 	when
 		$u : User($id : id)
 		PreviousRestaurants(userId == $id, category == PriceCategory.EXPENSIVE, $expensive : number)
